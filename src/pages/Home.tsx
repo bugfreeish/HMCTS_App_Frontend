@@ -31,8 +31,13 @@ export function Home(): React.ReactElement {
   if (tasks.length === 0) return <div>No tasks yet</div>;
 
   return (
-    <div>
-      {tasks.map((task) => <div key={task.id}>{task.title}</div>)}
+    <div className="mx-auto max-w-3xl space-y-6">
+      <h1 className="text-2xl font-bold text-gray-900">Tasks</h1>
+      <div className="rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+        <div className="space-y-3">
+          {tasks.map((task) => <div key={task.id}>{task.title}</div>)}
+        </div>
+      </div>
     </div>
   );
 }
