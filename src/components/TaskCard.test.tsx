@@ -3,6 +3,14 @@ import { MemoryRouter } from "react-router-dom";
 import type { Task } from "../types/task";
 import { TaskCard } from "./TaskCard";
 
+jest.mock("../api/tasks", () => ({
+  deleteTask: jest.fn(),
+}));
+
+jest.mock("./StatusBadge", () => ({
+  StatusBadge: () => <span data-testid="status-badge" />,
+}));
+
 const baseTask: Task = {
   id: "1",
   title: "Test Task",
@@ -13,10 +21,12 @@ const baseTask: Task = {
   updatedAt: "2026-05-01T10:00:00Z",
 };
 
+const noop = () => {};
+
 function renderCard(task: Task = baseTask) {
   return render(
     <MemoryRouter>
-      <TaskCard task={task} />
+      <TaskCard task={task} onDeleted={noop} onStatusChange={noop} />
     </MemoryRouter>,
   );
 }
@@ -41,9 +51,9 @@ it("does not render description when undefined", () => {
   expect(screen.queryByText("A description")).not.toBeInTheDocument();
 });
 
-it("renders the status", () => {
+it("renders the status badge", () => {
   renderCard();
-  expect(screen.getByText("pending")).toBeInTheDocument();
+  expect(screen.getByTestId("status-badge")).toBeInTheDocument();
 });
 
 it("renders the formatted due date", () => {

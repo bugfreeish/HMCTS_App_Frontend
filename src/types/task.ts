@@ -22,3 +22,7 @@ export interface CreateTaskRequest {
   dueDate?: string;
   status: TaskStatus;
 }
+
+export interface UpdateTaskRequest {
+  status: TaskStatus;
+}

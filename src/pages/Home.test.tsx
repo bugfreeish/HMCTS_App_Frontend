@@ -4,6 +4,7 @@ import { Home } from "./Home";
 
 jest.mock("../api/tasks", () => ({
   fetchTasks: jest.fn(),
+  updateTaskStatus: jest.fn(),
 }));
 
 const { fetchTasks } = jest.requireMock("../api/tasks") as {
@@ -21,7 +22,7 @@ it("shows loading initially", () => {
       <Home />
     </MemoryRouter>,
   );
-  expect(screen.getByText("Loading...")).toBeInTheDocument();
+  expect(screen.getByText("Loading tasks…")).toBeInTheDocument();
 });
 
 it("shows error message on failure", async () => {
@@ -55,5 +56,5 @@ it("shows empty state when no tasks", async () => {
       <Home />
     </MemoryRouter>,
   );
-  expect(await screen.findByText("No tasks yet")).toBeInTheDocument();
+  expect(await screen.findByText("No tasks yet.")).toBeInTheDocument();
 });

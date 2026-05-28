@@ -1,5 +1,6 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { CreateTask } from "./pages/CreateCard";
+import { EditTask } from "./pages/EditTask";
 import { Home } from "./pages/Home";
 
 function App(): React.ReactElement {
@@ -15,6 +16,8 @@ function App(): React.ReactElement {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create" element={<CreateTask />} />
+          <Route path="/edit/:id" element={<EditTask />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
     </div>
