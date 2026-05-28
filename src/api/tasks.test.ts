@@ -1,4 +1,4 @@
-import { fetchTasks } from "./tasks";
+import { createTask, fetchTasks } from "./tasks";
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -48,6 +48,36 @@ describe("fetchTasks", () => {
 
     const result = await fetchTasks();
     expect(result).toBeUndefined();
+  });
+});
+
+describe("createTask", () => {
+  const newTask = { title: "New task", status: "pending" as const };
+
+  it("calls POST /tasks with JSON body", async () => {
+    mockFetch(201, { id: "1", ...newTask, createdAt: "", updatedAt: "" });
+
+    await createTask(newTask);
+
+    expect(global.fetch).toHaveBeenCalledWith("/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newTask),
+    });
+  });
+
+  it("returns the created task on success", async () => {
+    const created = { id: "1", ...newTask, createdAt: "", updatedAt: "" };
+    mockFetch(201, created);
+
+    const result = await createTask(newTask);
+    expect(result).toEqual(created);
+  });
+
+  it("throws on error response", async () => {
+    mockFetch(400, { error: "Validation failed" });
+
+    await expect(createTask(newTask)).rejects.toThrow("Validation failed");
   });
 });
 

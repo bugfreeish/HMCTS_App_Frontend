@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import type { Task } from "../types/task";
 import { formatDate } from "../lib/formatDate";
+import type { Task } from "../types/task";
 
 interface TaskCardProps {
   task: Task;

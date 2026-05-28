@@ -7,5 +7,5 @@ export function formatDate(d: string | null | undefined): string {
       hour: "2-digit",
       minute: "2-digit",
     })
-    : "—"
+    : "—";
 }

@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
+import { CreateTask } from "./pages/CreateCard";
 import { Home } from "./pages/Home";
 
-function App() {
+function App(): React.ReactElement {
   return (
     <div className="min-h-svh bg-gray-50">
       <header className="border-b border-gray-200 bg-white">
@@ -13,6 +14,7 @@ function App() {
       <main className="mx-auto px-4 py-8">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/create" element={<CreateTask />} />
         </Routes>
       </main>
     </div>
