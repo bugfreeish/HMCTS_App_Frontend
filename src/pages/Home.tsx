@@ -1,6 +1,7 @@
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { fetchTasks } from "../api/tasks";
+import { TaskCard } from "../components/TaskCard";
 import type { Task } from "../types/task";
 
 export function Home(): React.ReactElement {
@@ -32,10 +33,14 @@ export function Home(): React.ReactElement {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Tasks</h1>
-      <div className="rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-        <div className="space-y-3">
-          {tasks.map((task) => <div key={task.id}>{task.title}</div>)}
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">Tasks</h1>
+        <div className="rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+          <div className="space-y-3">
+            {tasks.map((task) => {
+              return <TaskCard task={task} />;
+            })}
+          </div>
         </div>
       </div>
     </div>
