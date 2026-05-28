@@ -1,5 +1,38 @@
 import type React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { fetchTasks } from "../api/tasks";
+import type { Task } from "../types/task";
 
 export function Home(): React.ReactElement {
-  return <div></div>;
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async (): Promise<void> => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await fetchTasks();
+      setTasks(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load tasks");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (tasks.length === 0) return <div>No tasks yet</div>;
+
+  return (
+    <div>
+      {tasks.map((task) => <div key={task.id}>{task.title}</div>)}
+    </div>
+  );
 }
