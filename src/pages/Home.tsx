@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchTasks, updateTaskStatus } from "../api/tasks";
+import { editTask, fetchTasks } from "../api/tasks";
 import { TaskCard } from "../components/TaskCard";
 import type { Task, TaskStatus } from "../types/task";
 
@@ -31,7 +31,7 @@ export function Home() {
   };
 
   const handleStatusChange = async (id: string, status: TaskStatus) => {
-    const updated = await updateTaskStatus(id, { status });
+    const updated = await editTask(id, { status });
     setTasks((prev) => prev.map((t) => (t.id === id ? updated : t)));
   };
 

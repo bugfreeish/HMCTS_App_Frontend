@@ -28,7 +28,7 @@ export async function createTask(data: CreateTaskRequest): Promise<Task> {
   return handleResponse<Task>(res);
 }
 
-export async function updateTaskStatus(
+export async function editTask(
   id: string,
   data: UpdateTaskRequest,
 ): Promise<Task> {

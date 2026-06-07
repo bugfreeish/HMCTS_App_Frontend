@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { deleteTask, fetchTask, updateTaskStatus } from "../api/tasks";
+import { deleteTask, editTask, fetchTask } from "../api/tasks";
+import { InlineEdit } from "../components/InlineEdit";
 import { StatusBadge } from "../components/StatusBadge";
-import type { Task, TaskStatus } from "../types/task";
+import type { Task, TaskStatus, UpdateTaskRequest } from "../types/task";
 
 const statuses: TaskStatus[] = ["pending", "in-progress", "completed"];
 
@@ -22,12 +23,11 @@ export function EditTask() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  const handleStatusChange = async (status: TaskStatus) => {
+  const handleTaskEdit = async (updateTaskRequest: UpdateTaskRequest) => {
     if (!id) return;
     setSaving(true);
     try {
-      const updated = await updateTaskStatus(id, { status });
-      console.log(updated, "updated task");
+      const updated = await editTask(id, updateTaskRequest);
       setTask(updated);
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to update status");
@@ -66,12 +66,25 @@ export function EditTask() {
       <Link to="/" className="text-sm text-indigo-600 hover:text-indigo-500">&larr; Back to tasks</Link>
 
       <div className="mt-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-        <div className="flex items-start justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">{task.title}</h1>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <InlineEdit
+              value={task.title}
+              onSave={(title) => handleTaskEdit({ title })}
+              displayClassName="text-2xl font-bold text-gray-900"
+            />
+          </div>
+
           <StatusBadge status={task.status} />
         </div>
 
-        {task.description && <p className="mt-3 text-gray-600">{task.description}</p>}
+        <InlineEdit
+          value={task.description ?? ""}
+          onSave={(description) => handleTaskEdit({ description: description || undefined })}
+          multiline
+          placeholder="Add a description..."
+          displayClassName="mt-3 text-gray-600"
+        />
 
         <dl className="mt-6 space-y-3 text-sm">
           <div className="flex justify-between">
@@ -95,7 +108,7 @@ export function EditTask() {
               <button
                 key={s}
                 disabled={saving}
-                onClick={() => handleStatusChange(s)}
+                onClick={() => handleTaskEdit({ status: s })}
                 className={`rounded-md px-4 py-2 text-sm font-medium ${
                   task.status === s
                     ? "bg-indigo-600 text-white"
