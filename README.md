@@ -12,11 +12,12 @@ npm install
 npm run dev
 ```
 
-The app fetches tasks from a backend API. Start the backend first:
+The app fetches tasks from a backend API. Start the backend first (requires Docker and Rust):
 
 ```bash
-cd ../HMCTS_app_back
-npm install && npm run dev
+cd ../HMCTS_app_back_rust
+docker compose up -d    # Start PostgreSQL
+cargo run               # Start the API server on :3000
 ```
 
 The Vite dev server proxies `/tasks` and `/health` requests to `http://localhost:3000`.
@@ -25,20 +26,21 @@ The Vite dev server proxies `/tasks` and `/health` requests to `http://localhost
 
 | Command         | Description                                   |
 | --------------- | --------------------------------------------- |
-| `npm run dev`   | Start Vite dev server                         |
-| `npm run build` | Type-check with `tsc -b` then build with Vite |
-| `npm test`      | Run Jest tests                                |
-| `npm run lint`  | Run ESLint                                    |
-| `npm run fmt`   | Format code with dprint                       |
+| `npm run dev`    | Start Vite dev server                         |
+| `npm run build`  | Type-check with `tsc -b` then build with Vite |
+| `npm run preview`| Preview the production build                  |
+| `npm test`       | Run Jest tests                                |
+| `npm run lint`   | Run ESLint                                    |
+| `npm run fmt`    | Format code with dprint                       |
 
 ## Project structure
 
 ```
 src/
 ├── api/          # API client functions (fetchTasks, createTask, etc.)
-├── components/   # Reusable UI components (TaskCard, TaskForm, StatusBadge)
+├── components/   # Reusable UI components (TaskCard, TaskForm, StatusBadge, InlineEdit)
 ├── lib/          # Pure utility functions (formatDate)
-├── pages/        # Route-level components (Home, CreateCard, EditCard)
+├── pages/        # Route-level components (Home, CreateCard, EditTask)
 └── types/        # TypeScript type definitions
 ```
 
